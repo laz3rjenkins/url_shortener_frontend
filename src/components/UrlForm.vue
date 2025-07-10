@@ -18,14 +18,18 @@
 
 <script setup>
 import { ref } from 'vue'
+import {shortenUrl} from "../services/api.js";
 
 const longUrl = ref('')
 
 const emit = defineEmits(['url-shortened'])
 
-function shorten() {
-  const fakeShortUrl = "someurl";
-  // todo: здесь сделать запрос к апи и получить короткий url
-  emit('url-shortened', fakeShortUrl)
+async function shorten() {
+  try {
+    const shortUrl = await shortenUrl(longUrl.value)
+    emit('url-shortened', shortUrl.shorten_url)
+  } catch (error) {
+    console.error('Ошибка при сокращении URL:', error)
+  }
 }
 </script>
